@@ -6,13 +6,6 @@
         <!-- no specific mDNS values to list -->
     </string-array>
 
-    <string-array name="known_print_vendor_info_for_gcp" translatable="false">
-        <item>com.google.android.apps.cloudprint</item>
-        <item>Google</item>
-        <!-- no specific mDNS values to list -->
-    </string-array>
-
-
     <string-array name="known_print_vendor_info_for_hp" translatable="false">
         <item>com.hp.android.printservice</item>
         <item>HP</item>
@@ -22,116 +15,8 @@
         <item>Hewlett Packard</item>
     </string-array>
 
-    <string-array name="known_print_vendor_info_for_lexmark" translatable="false">
-        <item>com.lexmark.print.plugin</item>
-        <item>Lexmark</item>
-        <item>Lexmark</item>
-        <item>Lexmark International</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_brother" translatable="false">
-        <item>com.brother.printservice</item>
-        <item>Brother</item>
-        <item>Brother</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_canon" translatable="false">
-        <item>jp.co.canon.android.printservice.plugin</item>
-        <item>Canon</item>
-        <item>Canon</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_xerox" translatable="false">
-        <item>com.xerox.printservice</item>
-        <item>Xerox</item>
-        <item>Xerox</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_samsung" translatable="false">
-        <item>com.sec.app.samsungprintservice</item>
-        <item>Samsung Electronics</item>
-        <item>Samsung</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_epson" translatable="false">
-        <item>com.epson.mobilephone.android.epsonprintserviceplugin</item>
-        <item>Epson</item>
-        <item>Epson</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_konica_minolta" translatable="false">
-        <item>com.kmbt.printservice</item>
-        <item>kmkmkm</item>
-        <item>Konica Minolta</item>
-        <item>Minolta</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_fuji_xerox" translatable="false">
-        <item>jp.co.fujixerox.prt.PrintUtil.PCL</item>
-        <item>Fuji</item>
-        <item>FUJI XEROX</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_okidata" translatable="false" tools:ignore="UnusedResources">
-        <item>&#34;&#34;&#34;</item>
-        <item>Oki Data</item>
-        <item>Oki Data</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_pantum" translatable="false" tools:ignore="UnusedResources">
-        <item>&#34;&#34;&#34;</item>
-        <item>Pantum</item>
-        <item>Pantum</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_kyocera" translatable="false" tools:ignore="UnusedResources">
-        <item>&#34;&#34;&#34;</item>
-        <item>Kyocera</item>
-        <item>Kyocera</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_toshiba" translatable="false" tools:ignore="UnusedResources">
-        <item>&#34;&#34;&#34;</item>
-        <item>Toshiba</item>
-        <item>TOSHIBA TEC</item>
-        <item>TOSHIBA</item>
-    </string-array>
-
-    <string-array name="known_print_vendor_info_for_ricoh" translatable="false" tools:ignore="UnusedResources">
-        <item>&#34;&#34;&#34;</item>
-        <item>Ricoh</item>
-        <item>Ricoh</item>
-    </string-array>
-
-    <!--<string-array name="known_print_vendor_info_for_XYZ" translatable="false">-->
-        <!--&lt;!&ndash; package name &ndash;&gt;-->
-        <!--<item>com.android.example.plugin</item>-->
-        <!--&lt;!&ndash; Vendor value in print service xml &ndash;&gt;-->
-        <!--<item>Test</item>-->
-        <!--&lt;!&ndash; Pretend mDNS values &ndash;&gt;-->
-        <!--<item>Test</item>-->
-        <!--<item>Dummy</item>-->
-        <!--<item>Virtual</item>-->
-    <!--</string-array>-->
-
     <array name="known_print_plugin_vendors" translatable="false">
         <item>@array/known_print_vendor_info_for_mopria</item>
         <item>@array/known_print_vendor_info_for_hp</item>
-        <item>@array/known_print_vendor_info_for_lexmark</item>
-        <item>@array/known_print_vendor_info_for_brother</item>
-        <item>@array/known_print_vendor_info_for_canon</item>
-        <item>@array/known_print_vendor_info_for_xerox</item>
-        <item>@array/known_print_vendor_info_for_samsung</item>
-        <item>@array/known_print_vendor_info_for_epson</item>
-        <item>@array/known_print_vendor_info_for_konica_minolta</item>
-        <item>@array/known_print_vendor_info_for_fuji_xerox</item>
-
-        <!-- Uncomment entries when package name is known -->
-        <!--<item>@array/known_print_vendor_info_for_okidata</item>-->
-        <!--<item>@array/known_print_vendor_info_for_pantum</item>-->
-        <!--<item>@array/known_print_vendor_info_for_kyocera</item>-->
-        <!--<item>@array/known_print_vendor_info_for_toshiba</item>-->
-        <!--<item>@array/known_print_vendor_info_for_ricoh</item>-->
-
     </array>
 </resources>
