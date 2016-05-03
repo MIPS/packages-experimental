@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">AndroidDiscovery</string>
+    <string name="title_activity_device_list">DeviceList</string>
+    <string name="plugin_vendor_morpia">Mopria</string>
+    <string name="plugin_vendor_hp">HP</string>
+</resources>
