@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package foo.bar.permission2;
+package foo.bar.print;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument.Page;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CancellationSignal;
-import android.os.CancellationSignal.OnCancelListener;
 import android.os.ParcelFileDescriptor;
 import android.print.PageRange;
 import android.print.PrintAttributes;
@@ -38,22 +36,20 @@ import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.print.pdf.PrintedPdfDocument;
-import android.util.Log;
+import android.support.v4.print.PrintHelper;
 import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import foo.bar.print.R;
-
 /**
  * Simple sample of how to use the print APIs.
  */
-public class PrintActivity extends Activity {
+public class Main extends Activity {
 
     public static final String LOG_TAG = "PrintActivity";
 
-    private static final int PAGE_COUNT = 50;
+    private static final int PAGE_COUNT = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +66,36 @@ public class PrintActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_print) {
-            printView();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.menu_print:
+                printView();
+                return true;
+            case R.id.menu_print_uri_portrait_force:
+            case R.id.menu_print_uri_portrait:
+            case R.id.menu_print_uri_landscape:
+                try {
+                    PrintHelper ph = new PrintHelper(this);
+                    Uri uri = null;
+                    switch (item.getItemId()) {
+                        case R.id.menu_print_uri_portrait_force:
+                            ph.setOrientation(PrintHelper.ORIENTATION_PORTRAIT);
+                            /* fall through */
+                        case R.id.menu_print_uri_portrait:
+                            uri = Uri.parse("android.resource://foo.bar.print/raw/portrait");
+                            break;
+                        case R.id.menu_print_uri_landscape:
+                            uri = Uri.parse("android.resource://foo.bar.print/raw/landscape");
+                            break;
+                    }
+
+                    ph.printBitmap("Print Uri", uri);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void printView() {
@@ -89,37 +110,17 @@ public class PrintActivity extends Activity {
                 private PrintAttributes mPrintAttributes;
 
                 @Override
-                public void onStart() {
-                    Log.i(LOG_TAG, "onStart");
-                }
-
-                @Override
-                public void onFinish() {
-                    Log.i(LOG_TAG, "onFinish");
-                }
-
-                @Override
                 public void onLayout(final PrintAttributes oldAttributes,
                         final PrintAttributes newAttributes,
                         final CancellationSignal cancellationSignal,
                         final LayoutResultCallback callback,
                         final Bundle metadata) {
 
-                    Log.i(LOG_TAG, "onLayout() oldAttrs:" + oldAttributes + "\n"
-                            + "newAttrs:" + newAttributes + "\n"
-                            + "preview:" + metadata.getBoolean(
-                            PrintDocumentAdapter.EXTRA_PRINT_PREVIEW) );
-
                     new AsyncTask<Void, Void, Integer>() {
                         @Override
                         protected void onPreExecute() {
                             // First register for cancellation requests.
-                            cancellationSignal.setOnCancelListener(new OnCancelListener() {
-                                @Override
-                                public void onCancel() {
-                                    cancel(true);
-                                }
-                            });
+                            cancellationSignal.setOnCancelListener(() -> cancel(true));
                             mPrintAttributes = newAttributes;
                         }
 
@@ -175,10 +176,8 @@ public class PrintActivity extends Activity {
                 @Override
                 public void onWrite(final PageRange[] pages,
                         final ParcelFileDescriptor destination,
-                        final CancellationSignal cancellationSignal,
+                        final CancellationSignal canclleationSignal,
                         final WriteResultCallback callback) {
-
-                    Log.i(LOG_TAG, "onWrite() pages:" + Arrays.toString(pages));
 
                     new AsyncTask<Void, Void, Integer>() {
                         private static final int RESULT_WRITE_FAILED = 1;
@@ -186,17 +185,12 @@ public class PrintActivity extends Activity {
 
                         private final SparseIntArray mWrittenPages = new SparseIntArray();
                         private final PrintedPdfDocument mPdfDocument = new PrintedPdfDocument(
-                                PrintActivity.this, mPrintAttributes);
+                                Main.this, mPrintAttributes);
 
                         @Override
                         protected void onPreExecute() {
                             // First register for cancellation requests.
-                            cancellationSignal.setOnCancelListener(new OnCancelListener() {
-                                @Override
-                                public void onCancel() {
-                                    cancel(true);
-                                }
-                            });
+                            canclleationSignal.setOnCancelListener(() -> cancel(true));
 
                             for (int i = 0; i < PAGE_COUNT; i++) {
                                 // Be nice and respond to cancellation.
@@ -215,15 +209,6 @@ public class PrintActivity extends Activity {
                                             mPdfDocument.getPageHeight()) / Math.max(view.getWidth(), view.getHeight());
                                     page.getCanvas().scale(scale, scale);
                                     view.draw(page.getCanvas());
-
-
-                                    Paint paint = new Paint();
-                                    paint.setTextSize(100);
-                                    paint.setColor(Color.RED);
-                                    final int x = page.getCanvas().getWidth() / 2;
-                                    final int y = page.getCanvas().getHeight() / 2;
-                                    page.getCanvas().drawText(String.valueOf(i), x, y, paint);
-
                                     mPdfDocument.finishPage(page);
                                 }
                             }
@@ -268,15 +253,13 @@ public class PrintActivity extends Activity {
                 }
 
                 private PageRange[] computePageRanges(SparseIntArray writtenPages) {
-                    List<PageRange> pageRanges = new ArrayList<PageRange>();
+                    List<PageRange> pageRanges = new ArrayList<>();
     
-                    int start = -1;
-                    int end = -1;
+                    int start;
+                    int end;
                     final int writtenPageCount = writtenPages.size(); 
                     for (int i = 0; i < writtenPageCount; i++) {
-                        if (start < 0) {
-                            start = writtenPages.valueAt(i);
-                        }
+                        start = writtenPages.valueAt(i);
                         int oldEnd = end = start;
                         while (i < writtenPageCount && (end - oldEnd) <= 1) {
                             oldEnd = end;
@@ -285,7 +268,6 @@ public class PrintActivity extends Activity {
                         }
                         PageRange pageRange = new PageRange(start, end);
                         pageRanges.add(pageRange);
-                        start = end = -1;
                     }
     
                     PageRange[] pageRangesArray = new PageRange[pageRanges.size()];
