@@ -18,12 +18,9 @@ LOCAL_PATH:= $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res \
-    frameworks/support/v7/appcompat/res \
-    frameworks/support/v7/recyclerview/res
+LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res
 
-LOCAL_AAPT_FLAGS := --auto-add-overlay \
-    --extra-packages android.support.v7.appcompat:android.support.v7.recyclerview
+LOCAL_USE_AAPT2 := true
 
 LOCAL_MODULE_TAGS := optional
 
@@ -31,7 +28,8 @@ LOCAL_AAPT_FLAGS += -c mdpi,hdpi,xhdpi
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
-LOCAL_STATIC_JAVA_LIBRARIES := android-support-v4 \
+LOCAL_STATIC_ANDROID_LIBRARIES := \
+    android-support-v4 \
     android-support-v7-recyclerview \
     android-support-v7-appcompat
 
