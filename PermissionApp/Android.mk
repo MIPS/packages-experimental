@@ -8,6 +8,4 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
 LOCAL_PACKAGE_NAME := PermissionApp
 
-#LOCAL_CERTIFICATE := platform
-
 include $(BUILD_PACKAGE)
