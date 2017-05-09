@@ -43,7 +43,7 @@ import java.util.function.Predicate;
 import foo.bar.fill.R;
 
 public class FillService extends AutofillService {
-    static final boolean TEST_RESPONSE_AUTH = true;
+    static final boolean TEST_RESPONSE_AUTH = false;
 
     public static final String RESPONSE_ID = "RESPONSE_ID";
 
@@ -74,7 +74,7 @@ public class FillService extends AutofillService {
     public void onFillRequest(@NonNull FillRequest request,
             @NonNull CancellationSignal cancellationSignal,
             @NonNull FillCallback callback) {
-        AssistStructure structure = request.getStructure();
+        AssistStructure structure = request.getFillContexts().get(0).getStructure();
 
         ViewNode username = findUsername(structure);
         ViewNode password = findPassword(structure);
@@ -89,20 +89,21 @@ public class FillService extends AutofillService {
                         PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT)
                         .getIntentSender();
 
-                RemoteViews presentation = new RemoteViews(getPackageName(), R.layout.list_item);
+                RemoteViews presentation = new RemoteViews(getPackageName(), R.layout.pathology);
 
-                presentation.setTextViewText(R.id.text1, "First");
-                Intent firstIntent = new Intent(this, FirstActivity.class);
-                presentation.setOnClickPendingIntent(R.id.text1, PendingIntent.getActivity(
-                        this, 0, firstIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+//                presentation.setTextViewText(R.id.text1, "First");
+//                Intent firstIntent = new Intent(this, FirstActivity.class);
+//                presentation.setOnClickPendingIntent(R.id.text1, PendingIntent.getActivity(
+//                        this, 0, firstIntent, PendingIntent.FLAG_CANCEL_CURRENT));
 
-                presentation.setTextViewText(R.id.text2, "Second");
-                Intent secondIntent = new Intent(this, SecondActivity.class);
-                presentation.setOnClickPendingIntent(R.id.text2, PendingIntent.getActivity(
-                        this, 0, secondIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+//                presentation.setTextViewText(R.id.text2, "Second");
+//                Intent secondIntent = new Intent(this, SecondActivity.class);
+//                presentation.setOnClickPendingIntent(R.id.text2, PendingIntent.getActivity(
+//                        this, 0, secondIntent, PendingIntent.FLAG_CANCEL_CURRENT));
 
                 response = new FillResponse.Builder()
-                        .setAuthentication(sender, presentation)
+                        .setAuthentication(new AutofillId[]{username.getAutofillId(),
+                                password.getAutofillId()}, sender, presentation)
                         .build();
             } else {
                 Intent intent = new Intent(this, AuthActivity.class);
@@ -124,7 +125,7 @@ public class FillService extends AutofillService {
                 presentation4.setTextViewText(R.id.text1, DATASET4_NAME);
 
                 RemoteViews presentation5 = new RemoteViews(getPackageName(), R.layout.list_item);
-                presentation5.setTextViewText(R.id.text1, DATASET5_NAME);
+                presentation5.setTextViewText(R.id.text1, /*DATASET5_NAME*/ "Auth needed");
 
                 response = new FillResponse.Builder()
                         .addDataset(new Dataset.Builder(presentation1)
