@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2012 The Android Open Source Project
+# Copyright (C) 2017 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,23 +14,20 @@
 # limitations under the License.
 #
 
-LOCAL_PATH:= $(call my-dir)
+LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE_TAGS := optional
-
-LOCAL_AAPT_FLAGS += -c mdpi,hdpi,xhdpi
+LOCAL_MODULE_TAGS := tests
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
-LOCAL_STATIC_ANDROID_LIBRARIES := \
-    android-support-v4 \
-    android-support-v7-preference
+LOCAL_STATIC_JAVA_LIBRARIES := android-support-test
 
-LOCAL_USE_AAPT2 := true
+LOCAL_PACKAGE_NAME := CtsInstantCookieApp2
 
-LOCAL_PACKAGE_NAME := NotificationShowcase
+LOCAL_PROGUARD_ENABLED := disabled
+
+LOCAL_DEX_PREOPT := false
+
 include $(BUILD_PACKAGE)
-
-include $(call all-makefiles-under,$(LOCAL_PATH))
